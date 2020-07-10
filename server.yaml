@@ -1,22 +1,28 @@
 Description:
-    Cloudformation use to create a stack according to cloud nanodegree project two requirement, Developed by Muhammad zarak.
+  Cloudformation use to create a stack according to cloud nanodegree project two requirement, Developed by Muhammad zarak.
+
+Parameters:
+    Environment:
+        Description: Distinguish which enviroment this resource is
+        Type: String
+        Default: dev
+        AllowedValues: 
+        - prod
+        - dev
+        - staging
 
 Resources:
     WebAppInstances:
         Type: AWS::AutoScaling::AutoScalingGroup
         Properties:
-            AutoScalingGroupName: WebApplicationAutoScalingGroup
-            Cooldown: "200"
-            # VPCZoneIdentifier:
-            #     - Fn::ImportValue:
-            #         !Sub "${EnvironmentName}-PRIV-NETS"
+            VPCZoneIdentifier:
+            - Fn::ImportValue: !Sub "${Environment}-PRIV-NETS"
             LaunchConfigurationName:
                 Ref: InstanceLaunchConfig
-            MinSize: "1"
-            MaxSize: "3"
-            DesiredCapacity: "2"
+            MinSize: '1'
+            MaxSize: '3'
             TargetGroupARNs:
-                - Ref: ApplicationTargetGroup
+            - Ref: ApplicationTargetGroup
 
     InstanceLaunchConfig:
         Type: AWS::AutoScaling::LaunchConfiguration
@@ -27,10 +33,9 @@ Resources:
                     sudo apt-get update -y
                     sudo apt-get install apache2 -y
                     sudo systemctl start apache2.service
-                    cd /var/www/html
-                    sudo rm index.html
-                    sudo wget -P . https://udacity-lesson3.s3-us-west-2.amazonaws.com/index.html
-            ImageId: "ami-003634241a8fcdec0"
+                    sudo rm /var/www/html/index.html
+                    sudo wget -P /var/www/html/ https://nanodegree-zarak-s3-project.s3.amazonaws.com/index.html
+            ImageId: "ami-0f494dc39ae364f3d"
             SecurityGroups:
                 - Ref: ApplicationSecurityGroup
             InstanceType: "t2.medium"
@@ -43,8 +48,8 @@ Resources:
         Type: AWS::ElasticLoadBalancingV2::LoadBalancer
         Properties:
             Subnets:
-            - #Fn::ImportValue: !Sub "${EnvironmentName}-PUB1-SN"
-            - #Fn::ImportValue: !Sub "${EnvironmentName}-PUB2-SN"
+            - Fn::ImportValue: !Sub "${Environment}-PUB1-SN"
+            - Fn::ImportValue: !Sub "${Environment}-PUB2-SN"
             SecurityGroups:
             - Ref: LoadBalancerSecurityGroup
     
@@ -84,15 +89,14 @@ Resources:
             UnhealthyThresholdCount: 3
             VpcId:
               Fn::ImportValue:
-                Fn::Sub: #"${EnvironmentName}-VPCID"
+                Fn::Sub: "${Environment}-VPCID"
 
     LoadBalancerSecurityGroup:
         Type: AWS::EC2::SecurityGroup
         Properties:
             GroupDescription: Allow HTTP Traffic to Load Balancer to port 80
             VpcId:
-                Fn::ImportValue:
-                    !Sub "${EnvironmentName}-VPCID"
+                Fn::ImportValue: !Sub "${Environment}-VPCID"
             SecurityGroupIngress:
             - IpProtocol: tcp
               FromPort: 80
@@ -110,15 +114,15 @@ Resources:
           GroupDescription: hosts and SSH allowed to local
           VpcId:
             Fn::ImportValue:
-              !Sub "${EnvironmentName}-VPCID"
+              !Sub "${Environment}-VPCID"
           SecurityGroupIngress:
           - IpProtocol: tcp
             FromPort: 80
             ToPort: 80
             CidrIp: 0.0.0.0/0
           - IpProtocol: tcp
-            FromPort: 20
-            ToPort: 20
+            FromPort: 22
+            ToPort: 22
             CidrIp: 0.0.0.0/0
           SecurityGroupEgress:
           - IpProtocol: tcp
