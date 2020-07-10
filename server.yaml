@@ -38,7 +38,7 @@ Resources:
             ImageId: "ami-0f494dc39ae364f3d"
             SecurityGroups:
                 - Ref: ApplicationSecurityGroup
-            InstanceType: "t2.medium"
+            InstanceType: a1.large
             BlockDeviceMappings:
                 - DeviceName: "/dev/sdk"
                   Ebs:
@@ -58,7 +58,7 @@ Resources:
         Properties:
             DefaultActions:
             - Type: forward
-            TargetGroupArn:
+              TargetGroupArn:
                 Ref: ApplicationTargetGroup
             LoadBalancerArn: !Ref ApplicationLoadBalancer
             Port: '80'
