@@ -16,6 +16,7 @@ Parameters:
         Type: String
         Default: a1.large
         AllowedValues: 
+        - a1.large
         - a1.2xlarge
         - a1.4xlarge
         - a1.medium
@@ -152,6 +153,6 @@ Resources:
 
 Outputs:
     LoadBalancerDNS:
-        Value: !Join [ "", [ 'http://', !GetAtt WebAppLB.DNSName ]]
+        Value: !Join [ "", [ 'http://', !GetAtt ApplicationLoadBalancer.DNSName ]]
         Export:
             Name: "http-url" 

@@ -1,7 +1,7 @@
 Description:
   Cloudformation use to create a stack according to cloud nanodegree project two requirement, Developed by Muhammad zarak.
 
-  Parameters:
+Parameters:
     Environment:
       Description: Distinguish which enviroment this resource is
       Type: String
