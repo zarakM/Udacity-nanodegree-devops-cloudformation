@@ -1,4 +1,7 @@
-Parameters:
+Description:
+  Cloudformation use to create a stack according to cloud nanodegree project two requirement, Developed by Muhammad zarak.
+
+  Parameters:
     Environment:
       Description: Distinguish which enviroment this resource is
       Type: String
@@ -143,36 +146,11 @@ Resources:
       SubnetId: !Ref SecondPrivateSubnet
 
 Outputs:
-  
-  VPC: 
+  VPC:
     Description: A reference to the created VPC
     Value: !Ref VPC
     Export:
       Name: !Sub ${Environment}-VPCID
-
-  VPCPublicRouteTable:
-    Description: Public Routing
-    Value: !Ref PublicRouteTable
-    Export:
-      Name: !Sub ${Environment}-PUB-RT
-  
-  VPCPrivateRouteTable:
-    Description: Private Routing AZ1
-    Value: !Ref PrivateRouteTable1
-    Export:
-      Name: !Sub ${Environment}-PRI1-RT
-  
-  VPCPrivateRouteTable2:
-    Description: Private Routing AZ2
-    Value: !Ref PrivateRouteTable2
-    Export:
-      Name: !Sub ${Environment}-PRI2-RT
-  
-  PublicSubnets:
-    Description: A list of the public subnets
-    Value: !Join [",", [ !Ref FirstPublicSubnet, !Ref SecondPublicSubnet ]]
-    Export:
-      Name: !Sub ${Environment}-PUB-NETS
 
   PrivateSubnets:
     Description: A list of the private subnets
@@ -191,15 +169,3 @@ Outputs:
     Value: !Ref SecondPublicSubnet
     Export:
       Name: !Sub ${Environment}-PUB2-SN
-
-  FirstPrivateSubnet:
-    Description: A reference to the private subnet in the 1st Availability Zone
-    Value: !Ref FirstPrivateSubnet
-    Export:
-      Name: !Sub ${Environment}-PRI1-SN
-
-  SecondPrivateSubnet:
-    Description: A reference to the private subnet in the 2nd Availability Zone
-    Value: !Ref SecondPrivateSubnet
-    Export:
-      Name: !Sub ${Environment}-PRI2-SN
