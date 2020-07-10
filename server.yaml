@@ -11,6 +11,16 @@ Parameters:
         - dev
         - staging
 
+    InstanceID:
+        Description: Instance id to create according to the load required
+        Type: String
+        Default: a1.large
+        AllowedValues: 
+        - a1.2xlarge
+        - a1.4xlarge
+        - a1.medium
+        - a1.xlarge
+
 Resources:
     WebAppInstances:
         Type: AWS::AutoScaling::AutoScalingGroup
@@ -38,7 +48,7 @@ Resources:
             ImageId: "ami-0f494dc39ae364f3d"
             SecurityGroups:
                 - Ref: ApplicationSecurityGroup
-            InstanceType: a1.large
+            InstanceType: !Ref InstanceID
             BlockDeviceMappings:
                 - DeviceName: "/dev/sdk"
                   Ebs:
