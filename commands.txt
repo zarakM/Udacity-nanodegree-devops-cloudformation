@@ -1,0 +1,6 @@
+aws cloudformation create-stack --stack-name network --template-body file://subnet.yaml --region us-west-2
+aws cloudformation create-stack --stack-name server --template-body file://server.yaml --region us-west-2
+
+//all parameters has default values
+
+http://serve-appli-1phdt8rujp4cx-911627528.us-west-2.elb.amazonaws.com/
