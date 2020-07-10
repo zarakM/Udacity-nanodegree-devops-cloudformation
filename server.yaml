@@ -21,6 +21,16 @@ Parameters:
         - a1.medium
         - a1.xlarge
 
+    ScaleInCapacity:
+        Description: Lowest number of instance required when no or minimum load applicable
+        Type: String
+        Default: '1'
+
+    ScaleOutCapacity:
+        Description: Lowest number of instance required when no or minimum load applicable
+        Type: String
+        Default: '3'
+
 Resources:
     WebAppInstances:
         Type: AWS::AutoScaling::AutoScalingGroup
@@ -29,8 +39,8 @@ Resources:
             - Fn::ImportValue: !Sub "${Environment}-PRIV-NETS"
             LaunchConfigurationName:
                 Ref: InstanceLaunchConfig
-            MinSize: '1'
-            MaxSize: '3'
+            MinSize: !Ref ScaleInCapacity
+            MaxSize: !Ref ScaleOutCapacity
             TargetGroupARNs:
             - Ref: ApplicationTargetGroup
 
@@ -139,3 +149,9 @@ Resources:
             FromPort: 0
             ToPort: 65535
             CidrIp: 0.0.0.0/0
+
+Outputs:
+    LoadBalancerDNS:
+        Value: !Join [ "", [ 'http://', !GetAtt WebAppLB.DNSName ]]
+        Export:
+            Name: "http-url" 
